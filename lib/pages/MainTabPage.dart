@@ -7,6 +7,8 @@ import 'package:gank/utils/GankUtils.dart';
 import 'package:gank/data/RemoteDataSource.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'dart:math';
+import 'package:gank/pages/WebView.dart';
 
 
 class MainTabPage extends StatefulWidget {
@@ -165,10 +167,23 @@ class _MainTabState extends State<MainTabPage> {
 
   void _showDetail(GankEntity entity) async{
     print('_showDetail');
-    Map argument = new Map();
-    argument['url'] = entity.url;
-    var result = _platform.invokeMethod('openBrowser',argument);
-    print('_showDetail result:$result');
+    Random random = new Random();
+    int num = random.nextInt(100);
+    print('_showDetail: $num ');
+    if(num % 2==0){
+      print("_showDetail webview");
+      Navigator.of(context).push(new MaterialPageRoute(
+        builder: (context){
+          return new WebView(entity.url);
+        }
+      ));
+    }else{
+      Map argument = new Map();
+      argument['url'] = entity.url;
+      var result = _platform.invokeMethod('openBrowser',argument);
+      print("_showDetail webview result:$result");
+    }
+
   }
 
   Future<Null> _pullToRefresh() async{
